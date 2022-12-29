@@ -10,13 +10,17 @@ from config import Config
 from config import LOGGER
 from user import User
 
+  
+from os import environ
+from aiohttp import web as webserver
 
+PORT_CODE = environ.get("PORT", "8080")
 
 class Bot(Client):
     USER: User = None
     USER_ID: int = None
 
-    def __init__(self):
+def __init__(self):
         super().__init__(
             Config.BOT_SESSION,
             api_hash=Config.API_HASH,
@@ -33,7 +37,9 @@ class Bot(Client):
         await super().start()
         usr_bot_me = await self.get_me()
         print(f"{usr_bot_me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on @{usr_bot_me.username}.")
-     
+         
+        client = webserver.AppRunner(await bot_run())
+        
         self.bot_info = usr_bot_me
         self.set_parse_mode("html")
         self.USER, self.USER_ID = await User().start()
