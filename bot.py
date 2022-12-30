@@ -39,7 +39,10 @@ def __init__(self):
         print(f"{usr_bot_me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on @{usr_bot_me.username}.")
          
         client = webserver.AppRunner(await bot_run())
-        
+        await client.setup()
+        bind_address = "0.0.0.0"
+        await webserver.TCPSite(client, bind_address, PORT_CODE).start()
+
         self.bot_info = usr_bot_me
         self.set_parse_mode("html")
         self.USER, self.USER_ID = await User().start()
